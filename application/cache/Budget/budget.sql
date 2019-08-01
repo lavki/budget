@@ -22,6 +22,15 @@ CREATE TABLE IF NOT EXISTS `status` (
   UNIQUE INDEX `status_UNIQUE` (`status` ASC))
 ENGINE = InnoDB;
 
+--
+-- Дамп даних таблиці `status`
+--
+
+INSERT INTO `status` (`id`, `status`) VALUES
+(3, 'Expensed'),
+(1, 'Profit'),
+(2, 'Saved');
+
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
