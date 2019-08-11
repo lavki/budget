@@ -66,13 +66,31 @@ class WalletController extends CI_Controller
     }
 
     /**
+     * Read wallet list information by details
+     * @return mixed
+     */
+    public function detailsJsonInfo()
+    {
+        if( $this->input->post() ) {
+            $datails['data'] = $this->wallet_model->readWalletInformation($this->input->post());
+            echo json_encode($datails);
+        } else {
+            show_404();
+        }
+    }
+
+    /**
      * Read wallet by category
      */
     public function categoryInfo()
     {
-        $info = $this->wallet_model->readSpentByCategory();
-
-        echo json_encode($info);
+        if( $this->input->post() ) {
+            $date = $this->input->post();
+            $info = $this->wallet_model->readSpentByCategory( $date );
+            echo json_encode($info);
+        } else {
+            show_404();
+        }
     }
 
     /**
@@ -81,8 +99,8 @@ class WalletController extends CI_Controller
      */
     public function readWalletInfo()
     {
-        $info = $this->wallet_model->readWalletInfo();
-
+        $date = $this->input->post('date');
+        $info = $this->wallet_model->readWalletInfo($date);
         echo json_encode($info);
     }
 
@@ -184,6 +202,11 @@ class WalletController extends CI_Controller
             [
                 'field'  => 'type',
                 'label'  => 'Type',
+                'rules'  => 'required',
+            ],
+            [
+                'field'  => 'date',
+                'label'  => 'Date',
                 'rules'  => 'required',
             ],
         ];

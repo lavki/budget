@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="<?= base_url('/public/css/font-awesome.min.css'); ?>">
         <link rel="stylesheet" href="<?= base_url('/public/css/dataTables.bootstrap.min.css'); ?>">
         <link rel="stylesheet" href="<?= base_url('/public/css/base-style.css'); ?>">
+        <link rel="stylesheet" type="text/css" media="all" href="<?= base_url('/public/css/daterangepicker.css'); ?>">
 
         <script src="<?= base_url('/public/js/jquery-3.4.1.min.js'); ?>"></script>
         <script src="<?= base_url('/public/js/bootstrap.min.js'); ?>"></script>

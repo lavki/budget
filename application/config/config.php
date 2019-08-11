@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'your_host_link'; // your_host_link
+$config['base_url'] = 'http://budget'; // your_host_link
 
 /*
 |--------------------------------------------------------------------------

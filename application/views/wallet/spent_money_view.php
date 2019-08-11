@@ -21,7 +21,7 @@
                     <select name="currency" id="currency" value="<?= set_value('currency', $currency ?? null ); ?>" class="form-control input-sm" required aria-describedby="helpBlock">
                         <option value="">Currency...</option>
                         <?php foreach( $currencies as $currency ): ?>
-                            <option value="<?= $currency->id; ?>"><?= $currency->currency; ?></option>
+                            <option value="<?= $currency->id; ?>" <?= ($currency->id == 1) ? 'selected' : ''; ?>><?= $currency->currency; ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?= form_error('currency' ); ?>
@@ -46,8 +46,15 @@
                     <?= form_error('type' ); ?>
                 </div><!-- /.form-group -->
 
-                <div class="form-group col-md-4 col-md-offset-6 text-right">
-                    <button type="submit" class="btn btn-sm btn-default">
+                <div class="form-group col-md-4 col-md-offset-2 <?= empty(form_error('date' )) ? '' : ' has-error'; ?>">
+                    <label for="date" class="control-label">Date:</label>
+                    <input type="text" name="date" id="date" class="form-control input-sm" required aria-describedby="helpBlock">
+                    <?= form_error('date' ); ?>
+                </div><!-- /.form-group -->
+
+                <div class="form-group col-md-4">
+                    <label for="submit" class="control-label" style="opacity: 0;">Add Expenses:</label>
+                    <button type="submit" class="form-control input-sm">
                         <i class="fa fa-save"></i> Add expenses
                     </button>
                 </div><!-- /.form-group -->
@@ -56,8 +63,23 @@
     </div><!-- /.row -->
 </div><!-- /.container -->
 
+<script src="<?= base_url('/public/js/moment.min.js'); ?>"></script>
+<script src="<?= base_url('/public/js/daterangepicker.js'); ?>"></script>
 <script>
     $(document).ready(function () {
+
+        // datarange picker
+        $('#date').daterangepicker({
+            "minYear": 2019,
+            "singleDatePicker": true,
+            "autoApply": true,
+            "autoUpdateInput": true,
+            "drops":     "up",
+            "locale": {
+                "format": "YYYY-MM-DD",
+                "firstDay": 1
+            }
+        });
 
         // Read types by selected category
         $('body').on('change', 'select[name="category"]', function () {

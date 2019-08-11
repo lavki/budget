@@ -1,3 +1,7 @@
+        <div class="col-md-2 col-md-offset-2">
+            <input type="text" id="datepicker" class="form-control input-sm">
+        </div><!-- /.col -->
+
         <div class="col-md-8 col-md-offset-2">
             <div id="chartMonths"></div>
         </div><!-- /.col -->
@@ -5,8 +9,50 @@
 </div><!-- /.container -->
 
 <script src="<?= base_url('/public/js/highcharts.js'); ?>"></script>
+<script src="<?= base_url('/public/js/moment.min.js'); ?>"></script>
+<script src="<?= base_url('/public/js/daterangepicker.js'); ?>"></script>
 
 <script>
+    $('#datepicker').daterangepicker({
+        "minYear": 2019,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        "linkedCalendars": false,
+        "showCustomRangeLabel": false,
+        "alwaysShowCalendars": true,
+        "startDate": "07/29/2019",
+        "endDate": "08/04/2019",
+        "minDate": "01/28/01",
+        "cancelClass": "btn-danger"
+    }, function(start, end, label) {
+        var date = {
+            from: start.format('YYYY-MM-DD'),
+            to:   end.format('YYYY-MM-DD')
+        };
+
+        // months Cart
+        Highcharts.chart('chartMonths', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            xAxis: {
+                categories: drawMonthsVisualization('months', date)
+            },
+            credits: {
+                enabled: false
+            },
+            series: drawMonthsVisualization('info', date)
+        });
+    });
 
     // months Cart
     Highcharts.chart('chartMonths', {
@@ -25,46 +71,8 @@
         series: drawMonthsVisualization('info')
     });
 
-    // month Chart
-/*    Highcharts.chart('chartMonths', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            categories: drawMonthsVisualization('months'),
-            crosshair: true
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Sum'
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f}.</b></td></tr>',
-            footerFormat: '</table>',
-            shared: false,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        series: drawMonthsVisualization('info')
-    });*/
-
     // Build the chart by months
-    function drawMonthsVisualization(typeInfo) {
+    function drawMonthsVisualization(typeInfo, date) {
         $.ajaxSetup({async: false});
         var months = [];
         var info = [
@@ -74,11 +82,9 @@
             {name: 'Saved',       data: []}
         ];
 
-        $.post('/readWalletInfo', function (data) {
+        $.post('/readWalletInfo', {date: date}, function (data) {
             if( data.length > 0 ) {
                 var data = JSON.parse(data);
-
-                console.log(data);
 
                 if( typeInfo == 'months' ) {
                     for( var key = 0; key < data.length; key++ ) {
@@ -98,21 +104,8 @@
         $.ajaxSetup({async: true});
 
         if(months.length > 0 ) {
-            console.log(months);
             return months;
-        }
-        else if(info.length > 0 ) {
-            /*return [{
-                name: 'John',
-                data: [5, 3, 4, 7, 2]
-            }, {
-                name: 'Jane',
-                data: [2, -2, -3, 2, 1]
-            }, {
-                name: 'Joe',
-                data: [3, 4, 4, -2, 5]
-            }];*/
-            console.log(info);
+        } else if(info.length > 0 ) {
             return info;
         }
     }
